@@ -64,18 +64,21 @@ EOF
 npm run dev
 ```
 
-Open **http://localhost:3000/preview** and follow the demo:
+Open **http://localhost:3000**, click **Try the demo**, and follow the five beats:
 
-1. Enter a title and the exam text, then click **Encrypt and upload**. You can't read it back.
-2. Click **Open** on the paper. It stays **Locked**: nobody holds `exam-opener`.
-3. In **Committee**, click **Admin 1: request exam-opener for myself**. The request is pending 1 of 2.
-4. Click **Admin 1: approve**. It is refused: the requester already counts as vote 1.
-5. Click **Admin 2: approve**. The request commits (2 of 2).
-6. Click **Try again** on the paper. It opens.
-7. **What the operator sees** shows the only thing the server stores: ciphertext and policies.
+1. Sign in as **Exam setter**. On **Upload a paper**, enter a title and text, then click
+   **Encrypt and upload**. On **Papers**, click **Open**: refused, the setter is write-only.
+2. **Server view** shows the only thing the server stores: ciphertext and policies.
+3. **Switch user** to **Admin 1**. **Open** is refused. In **Committee approvals**, click
+   **Request exam-opener for me** (1 of 2), then **Try to approve your own request**: refused.
+4. **Switch user** to **Admin 2** and click **Approve as Admin 2**. The request commits (2 of 2).
+5. **Switch user** back to **Admin 1** (signing in again picks up the role) and click **Open**.
+   The paper opens.
 
-What is simulated: sign-in, the Tide encryption (mock mode stores `MOCK:` + base64, which is **not**
-encryption) and the IGA change request. The data flow, API validation and UI are the real ones.
+What is simulated: sign-in (a picker instead of the Tide enclave), the Tide encryption (mock mode
+stores `MOCK:` + base64, which is **not** encryption) and the IGA change request. The API still
+checks identity (401 without one), validates ciphertext, and writes the real database.
+`/preview` is the same flow on one page, with an in-memory API.
 
 ### Run live (when the Tide network is available)
 
