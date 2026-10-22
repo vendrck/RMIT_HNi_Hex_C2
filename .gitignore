@@ -17,3 +17,5 @@ data/exams.db*
 # Tide pack (fetched, not committed) and private team notes
 .tide-pack/
 TEAM.local.md
+next-env.d.ts
+*.tsbuildinfo
