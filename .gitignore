@@ -12,9 +12,12 @@ scripts/.skycloak-api-key
 # Local TideCloak state (adapter export + H2 volume)
 data/tidecloak.json
 data/keycloakdb*
+data/exams.db*
+data/admin-policy.json
+data/init.log
 
 # Tide pack (fetched, not committed) and private team notes
 .tide-pack/
 TEAM.local.md
-data/admin-policy.json
-data/init.log
+next-env.d.ts
+*.tsbuildinfo

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@tidecloak/nextjs": "0.14.17",
+    "@types/better-sqlite3": "^9.6.0",
+    "better-sqlite3": "^13.0.3",
     "jose": "^6.0.0",
     "next": "^16.0.0",
     "react": "^19.0.0",
