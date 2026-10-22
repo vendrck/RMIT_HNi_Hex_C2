@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AppShell, PageHead } from "@/components/AppShell";
 import { ExamList } from "@/components/ExamList";
 import { ExamUploadForm } from "@/components/ExamUploadForm";
 import { GovernanceBanner } from "@/components/GovernanceBanner";
 import { ServerViewTable } from "@/components/ServerViewTable";
+import { MockGovernance } from "./MockGovernance";
 import type { ExamApi } from "@/components/examApi";
 import type { ExamRow } from "@/lib/db";
 import styles from "@/components/vault.module.css";
@@ -40,41 +41,25 @@ function fakeApi(rows: Map<string, ExamRow>, onChange: () => void): ExamApi {
 
 export function PreviewClient() {
   const [version, setVersion] = useState(0);
-  const [denied, setDenied] = useState(false);
   const rows = useMemo(() => new Map<string, ExamRow>(), []);
   const api = useMemo(() => fakeApi(rows, () => setVersion((v) => v + 1)), [rows]);
   // A new function identity makes ExamList reload after an upload.
   const listApi = useMemo<ExamApi>(() => (p, i) => api(p, i), [api, version]);
 
-  useEffect(() => {
-    try {
-      setDenied(localStorage.getItem("mockDenied") === "1");
-    } catch {}
-  }, []);
-
-  function toggleDenied() {
-    const next = !denied;
-    try {
-      localStorage.setItem("mockDenied", next ? "1" : "0");
-    } catch {}
-    setDenied(next);
-  }
-
   return (
     <AppShell
       devNote={
-        <>
-          <span>Dev preview: fake in-memory API, mock crypto. Not the real app.</span>
-          <label>
-            <input type="checkbox" checked={denied} onChange={toggleDenied} /> Simulate Tide denial
-          </label>
-        </>
+        <span>
+          Simulation: fake in-memory API, mock crypto and a simulated committee. Not the real Tide
+          network.
+        </span>
       }
     >
       <PageHead title="Upload a paper" />
       <ExamUploadForm api={api} />
       <h2 className={styles.sectionTitle}>Papers</h2>
       <GovernanceBanner />
+      <MockGovernance />
       <ExamList
         api={listApi}
         onSignInAgain={() => alert("The real /exams page signs you out here, so you can sign in again.")}

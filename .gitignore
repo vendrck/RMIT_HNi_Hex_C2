@@ -13,6 +13,8 @@ scripts/.skycloak-api-key
 data/tidecloak.json
 data/keycloakdb*
 data/exams.db*
+data/admin-policy.json
+data/init.log
 
 # Tide pack (fetched, not committed) and private team notes
 .tide-pack/
