@@ -1,4 +1,5 @@
 import { connection } from "next/server";
+import { AppShell, PageHead } from "@/components/AppShell";
 import { ServerViewTable } from "@/components/ServerViewTable";
 import { listExamRows } from "@/lib/db";
 
@@ -8,9 +9,9 @@ import { listExamRows } from "@/lib/db";
 export default async function ServerViewPage() {
   await connection(); // read the DB per request, not once at build time
   return (
-    <main>
-      <h1>What the operator sees</h1>
+    <AppShell>
+      <PageHead title="What the operator sees" />
       <ServerViewTable rows={listExamRows()} />
-    </main>
+    </AppShell>
   );
 }

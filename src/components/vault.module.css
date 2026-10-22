@@ -1,0 +1,435 @@
+/* Exam Vault component styles. Tokens live in theme.css. */
+
+/* ---------- Shell ---------- */
+.shell {
+  min-height: 100vh;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.header {
+  border-bottom: 2px solid var(--ink);
+  background: var(--sheet);
+}
+
+.headerInner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 2rem;
+}
+
+.wordmark {
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+.navLink {
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.navLink:hover {
+  color: var(--ink);
+}
+
+.navLink[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom-color: var(--ink);
+}
+
+.devStrip {
+  background: var(--seal-tint);
+  color: var(--seal);
+  border-bottom: 1px solid var(--seal);
+}
+
+.devStripInner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.main {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+/* ---------- Page heading ---------- */
+.pageHead {
+  margin-bottom: 1.75rem;
+  max-width: 42rem;
+}
+
+.title {
+  font-size: clamp(1.75rem, 4vw, 2.375rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.sectionTitle {
+  font-size: 1.375rem;
+  font-weight: 800;
+  margin: 3rem 0 1rem;
+}
+
+/* ---------- Notice (governance) ---------- */
+.notice {
+  background: var(--notice);
+  border-left: 4px solid var(--ink);
+  padding: 0.875rem 1rem;
+  margin: 0 0 1.5rem;
+  max-width: 42rem;
+}
+
+.notice p {
+  margin: 0;
+}
+
+.notice a {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ---------- Buttons ---------- */
+.button,
+.buttonQuiet {
+  display: inline-block;
+  text-decoration: none;
+  font: inherit;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 0.625rem 1.125rem;
+  cursor: pointer;
+  border: 2px solid var(--ink);
+}
+
+.button {
+  background: var(--ink);
+  color: var(--sheet);
+}
+
+.button:hover:not(:disabled) {
+  background: transparent;
+  color: var(--ink);
+}
+
+.buttonQuiet {
+  background: transparent;
+  color: var(--ink);
+}
+
+.buttonQuiet:hover:not(:disabled) {
+  background: var(--sheet);
+}
+
+.button:disabled,
+.buttonQuiet:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- Form ---------- */
+.form {
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.25rem;
+  max-width: 42rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.label {
+  font-weight: 700;
+}
+
+.hint {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.input,
+.textarea {
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-bottom: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 0.625rem 0.75rem;
+}
+
+.textarea {
+  font-family: var(--font-paper), Georgia, serif;
+  line-height: 1.65;
+  min-height: 14rem;
+  resize: vertical;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.progress {
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* ---------- Messages ---------- */
+.alert {
+  border-left: 4px solid var(--seal);
+  background: var(--seal-tint);
+  padding: 0.75rem 1rem;
+  margin: 0;
+}
+
+.alert strong {
+  color: var(--seal);
+}
+
+.success {
+  background: var(--sheet);
+  border: 2px solid var(--opened);
+  padding: 1.5rem;
+  max-width: 42rem;
+}
+
+.success h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.375rem;
+}
+
+.success p {
+  margin: 0 0 1rem;
+}
+
+.muted {
+  color: var(--ink-soft);
+}
+
+/* ---------- Exam paper covers ---------- */
+.papers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.paper {
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.paperHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.paperTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 0.25rem;
+}
+
+.paperMeta {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+/* The ruled instruction box from the front of a printed exam paper. */
+.instruction {
+  border: 3px solid var(--ink);
+  padding: 0.625rem 0.875rem;
+  margin: 1rem 0;
+  font-weight: 700;
+}
+
+.paperActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.paperBody {
+  font-family: var(--font-paper), Georgia, serif;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  max-width: 68ch;
+  margin: 1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.paper .alert {
+  margin: 1rem 0;
+}
+
+.alert .buttonQuiet {
+  margin-top: 0.75rem;
+}
+
+/* ---------- Seal stamp: the one bold element ---------- */
+.seal {
+  flex: none;
+  display: inline-block;
+  font-weight: 800;
+  font-size: 0.9375rem;
+  padding: 0.25rem 0.75rem;
+  border: 3px double currentColor;
+  border-radius: 4px;
+  transform: rotate(-4deg);
+}
+
+.sealLocked {
+  color: var(--seal);
+}
+
+.sealOpened {
+  color: var(--opened);
+  background: var(--opened-tint);
+  animation: unseal 420ms ease-out;
+  transform: rotate(0deg);
+}
+
+@keyframes unseal {
+  from {
+    transform: rotate(-4deg) scale(1.25);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---------- Server view ---------- */
+.caption {
+  font-size: 1.125rem;
+  font-weight: 700;
+  max-width: 42rem;
+  margin: 0 0 1.25rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9375rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.table th {
+  border-bottom: 2px solid var(--ink);
+  white-space: nowrap;
+}
+
+.table tr:last-child td {
+  border-bottom: 0;
+}
+
+.mono {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+}
+
+.cipher {
+  word-break: break-all;
+  min-width: 16rem;
+  max-width: 24rem;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.empty {
+  background: var(--sheet);
+  border: 2px dashed var(--rule);
+  padding: 2rem 1.5rem;
+  max-width: 42rem;
+}
+
+.empty p {
+  margin: 0 0 1rem;
+}
+
+.empty p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Gate ---------- */
+.gate {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 36rem) {
+  .form,
+  .paper,
+  .success {
+    padding: 1rem;
+  }
+  .paperHead {
+    flex-direction: column-reverse;
+  }
+}
