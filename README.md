@@ -42,4 +42,65 @@ An admin uploads an exam and cannot read it back. The server view shows only gib
 
 ## Setup
 
-<!-- TODO(A): fill after the realm bootstrap works. Base it on docs/TIDE_TEMPLATE_README.md. -->
+> **Status:** the Tide network is under heavy load during the hackathon, and licensing a new
+> TideCloak realm currently fails (`TIDE-IDPEXT-VENDOR-KEYGEN_FAILED`). Following the organisers'
+> [Plan C](https://tide.org/unlocked/#plan-c), the prototype runs with sign-in, encryption and the
+> committee vote **simulated**. The real Tide wiring is in place and switches on with one flag.
+
+### Requirements
+
+- Node.js 20.9+
+- For live mode only: Docker, `curl`, `jq`
+
+### Run the simulated demo (no TideCloak needed)
+
+```bash
+npm install
+git restore public/silent-check-sso.html   # @tidecloak/js rewrites this Tide file on install; keep it byte-identical
+echo "NEXT_PUBLIC_MOCK_TIDE=1" > .env.local
+mkdir -p data && cat > data/tidecloak.json <<'EOF'
+{ "realm": "stub", "auth-server-url": "http://localhost:8080", "resource": "stub", "public-client": true }
+EOF
+npm run dev
+```
+
+Open **http://localhost:3000/preview** and follow the demo:
+
+1. Enter a title and the exam text, then click **Encrypt and upload**. You can't read it back.
+2. Click **Open** on the paper. It stays **Locked**: nobody holds `exam-opener`.
+3. In **Committee**, click **Admin 1: request exam-opener for myself**. The request is pending 1 of 2.
+4. Click **Admin 1: approve**. It is refused: the requester already counts as vote 1.
+5. Click **Admin 2: approve**. The request commits (2 of 2).
+6. Click **Try again** on the paper. It opens.
+7. **What the operator sees** shows the only thing the server stores: ciphertext and policies.
+
+What is simulated: sign-in, the Tide encryption (mock mode stores `MOCK:` + base64, which is **not**
+encryption) and the IGA change request. The data flow, API validation and UI are the real ones.
+
+### Run live (when the Tide network is available)
+
+```bash
+cp .env.example .env    # set KC_BOOTSTRAP_ADMIN_PASSWORD to a strong value
+TIDE_LICENSE_EMAIL=<your email> TIDE_TERMS_ACCEPTED=yes npm run init
+```
+
+`npm run init` starts TideCloak (`tideorg/tidecloak-dev`) on port 8080, creates the `exam-vault`
+realm with IGA, licenses it to your email under [Tide's terms](https://tide.org/legal), and prints
+an invite link. Open it to link your admin Tide account; the script then writes
+`data/tidecloak.json`. Set `NEXT_PUBLIC_MOCK_TIDE=0` in `.env.local` and run `npm run dev`.
+For the 2-of-3 committee, link two more admins (see `PLAN.md`, task A5).
+
+macOS note: `scripts/init-tidecloak.sh` is written for Linux. On macOS it currently stops at
+`chown` (without `sudo`) and at GNU-style `sed -i`; both need a small patch to the script.
+
+### Pages and API
+
+| Route | What it is |
+|---|---|
+| `/upload` | Encrypt a paper in the browser and upload the ciphertext (sign-in required) |
+| `/exams` | List papers; **Open** decrypts in the browser only if the Tide network agrees |
+| `/server-view` | Raw database rows: what the operator sees (public on purpose: it is all ciphertext) |
+| `/preview` | The simulated demo above (development only) |
+| `POST /api/exams`, `GET /api/exams`, `GET /api/exams/[id]` | JWT + DPoP verified (`withAuth`); rejects anything that is not ciphertext-shaped |
+
+Tests: `npm test`.
