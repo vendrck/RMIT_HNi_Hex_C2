@@ -11,19 +11,16 @@ type OpenState =
   | { kind: "denied" }
   | { kind: "error"; message: string };
 
-// One label per exam. "Pending approval" = the Tide network refused: the opener role
-// is not (yet) in this user's token. We can't see the change request from here.
-type Badge = "Locked" | "Pending approval" | "Opened";
+// One label per exam. A Tide denial stays "Locked": the app can't tell a pending change
+// request from no request at all, so it never claims "pending" (the console shows that).
+type Badge = "Locked" | "Opened";
 const BADGE_STYLE: Record<Badge, React.CSSProperties> = {
   Locked: { background: "#eee", color: "#333" },
-  "Pending approval": { background: "#fff3cd", color: "#664d03" },
   Opened: { background: "#d1e7dd", color: "#0f5132" },
 };
 
 function badgeFor(state: OpenState | undefined): Badge {
-  if (state?.kind === "opened") return "Opened";
-  if (state?.kind === "denied") return "Pending approval";
-  return "Locked";
+  return state?.kind === "opened" ? "Opened" : "Locked";
 }
 
 // Lists exams (no ciphertext). Open fetches the ciphertext and decrypts in the browser.
@@ -93,7 +90,8 @@ export function ExamList({ api, onSignInAgain }: { api: ExamApi; onSignInAgain?:
             {state?.kind === "opened" && <pre style={{ whiteSpace: "pre-wrap" }}>{state.text}</pre>}
             {state?.kind === "denied" && (
               <p role="alert">
-                Denied by the Tide network. Opening needs the {OPENER_ROLE} role, granted by 2 of 3
+                <strong>Locked: needs 2 of 3 committee approvals.</strong> Denied by the Tide
+                network. Opening needs the {OPENER_ROLE} role, granted by 2 of 3
                 committee approvals. If your request was just approved, sign in again (or wait up to 2
                 minutes).{" "}
                 {onSignInAgain && <button onClick={onSignInAgain}>Sign in again</button>}
