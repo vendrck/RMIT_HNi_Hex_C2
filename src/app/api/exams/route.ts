@@ -1,5 +1,6 @@
 import { withExamAuth } from "./simulatedAuth";
 import { insertExam, getExam, listExams } from "@/lib/db";
+import { isCiphertext } from "./ciphertextShape";
 
 // The server only ever sees ciphertext + signed policies. Anything that could be
 // plaintext is rejected here, before it reaches the DB.
@@ -7,15 +8,7 @@ import { insertExam, getExam, listExams } from "@/lib/db";
 const MOCK = process.env.NEXT_PUBLIC_MOCK_TIDE === "1";
 const ALLOWED_KEYS = new Set(["id", "title", "ciphertext", "writePolicy", "readPolicy"]);
 const EXAM_ID = /^exam-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const BASE64 = /^[A-Za-z0-9+/]+={0,2}$/;
-const MAX_CIPHERTEXT = 2_000_000;
 const MAX_TITLE = 200;
-
-function isCiphertext(value: string): boolean {
-  // The mock's "ciphertext" is MOCK:<base64>; only accept it while the mock is on.
-  const body = MOCK && value.startsWith("MOCK:") ? value.slice(5) : value;
-  return body.length >= 16 && body.length % 4 === 0 && body.length <= MAX_CIPHERTEXT && BASE64.test(body);
-}
 
 const nonEmpty = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
 
@@ -42,7 +35,7 @@ export const POST = withExamAuth(async (req, jwt) => {
   if (!nonEmpty(title) || title.length > MAX_TITLE) {
     return Response.json({ error: `title must be 1-${MAX_TITLE} characters` }, { status: 400 });
   }
-  if (typeof ciphertext !== "string" || !isCiphertext(ciphertext)) {
+  if (typeof ciphertext !== "string" || !isCiphertext(ciphertext, MOCK)) {
     return Response.json({ error: "ciphertext is not ciphertext-shaped" }, { status: 400 });
   }
   if (!nonEmpty(writePolicy) || !nonEmpty(readPolicy)) {

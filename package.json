@@ -6,7 +6,7 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "test": "node tests/upload-regressions.test.cjs",
+    "test": "node --test tests/",
     "init": "bash scripts/init-tidecloak.sh"
   },
   "dependencies": {
