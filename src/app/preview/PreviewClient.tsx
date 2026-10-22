@@ -70,7 +70,10 @@ export function PreviewClient() {
       <ExamUploadForm api={api} />
       <h1>Exams</h1>
       <GovernanceBanner />
-      <ExamList api={listApi} />
+      <ExamList
+        api={listApi}
+        onSignInAgain={() => alert("The real /exams page signs you out here, so you can sign in again.")}
+      />
       <h1>What the operator sees</h1>
       <ServerViewTable rows={[...rows.values()].reverse()} />
     </main>

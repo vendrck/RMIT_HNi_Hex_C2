@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createExamPolicies, encryptExam } from "@/lib/vault/crypto";
-import { readJson, type ExamApi } from "./examApi";
+import { readableError, readJson, type ExamApi } from "./examApi";
 
 type Status =
   | { kind: "idle" }
@@ -45,7 +45,7 @@ export function ExamUploadForm({ api }: { api: ExamApi }) {
       setStatus({ kind: "done", title: title.trim() });
       setTitle("");
     } catch (err) {
-      setStatus({ kind: "error", message: err instanceof Error ? err.message : String(err) });
+      setStatus({ kind: "error", message: readableError(err) });
     }
   }
 
