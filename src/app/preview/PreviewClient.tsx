@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ExamList } from "@/components/ExamList";
 import { ExamUploadForm } from "@/components/ExamUploadForm";
 import { GovernanceBanner } from "@/components/GovernanceBanner";
 import { ServerViewTable } from "@/components/ServerViewTable";
+import { MockGovernance } from "./MockGovernance";
 import type { ExamApi } from "@/components/examApi";
 import type { ExamRow } from "@/lib/db";
 
@@ -38,38 +39,22 @@ function fakeApi(rows: Map<string, ExamRow>, onChange: () => void): ExamApi {
 
 export function PreviewClient() {
   const [version, setVersion] = useState(0);
-  const [denied, setDenied] = useState(false);
   const rows = useMemo(() => new Map<string, ExamRow>(), []);
   const api = useMemo(() => fakeApi(rows, () => setVersion((v) => v + 1)), [rows]);
   // A new function identity makes ExamList reload after an upload.
   const listApi = useMemo<ExamApi>(() => (p, i) => api(p, i), [api, version]);
 
-  useEffect(() => {
-    try {
-      setDenied(localStorage.getItem("mockDenied") === "1");
-    } catch {}
-  }, []);
-
-  function toggleDenied() {
-    const next = !denied;
-    try {
-      localStorage.setItem("mockDenied", next ? "1" : "0");
-    } catch {}
-    setDenied(next);
-  }
-
   return (
     <main>
       <p style={{ background: "#fee", padding: 8 }}>
-        DEV PREVIEW: fake in-memory API, mock crypto. Not the real app.{" "}
-        <label>
-          <input type="checkbox" checked={denied} onChange={toggleDenied} /> Simulate Tide denial
-        </label>
+        SIMULATION: fake in-memory API, mock crypto and a simulated committee. Not the real
+        Tide network.
       </p>
       <h1>Upload an exam</h1>
       <ExamUploadForm api={api} />
       <h1>Exams</h1>
       <GovernanceBanner />
+      <MockGovernance />
       <ExamList
         api={listApi}
         onSignInAgain={() => alert("The real /exams page signs you out here, so you can sign in again.")}
