@@ -12,6 +12,7 @@ scripts/.skycloak-api-key
 # Local TideCloak state (adapter export + H2 volume)
 data/tidecloak.json
 data/keycloakdb*
+data/exams.db*
 
 # Tide pack (fetched, not committed) and private team notes
 .tide-pack/
