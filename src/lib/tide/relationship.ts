@@ -59,7 +59,14 @@ function tc(): TideClient {
   return client;
 }
 
-const toBase64 = (b: Uint8Array) => btoa(String.fromCharCode(...b));
+function toBase64(bytes: Uint8Array): string {
+  // Keep each call below the engine's argument limit, even for large exams.
+  const chunks: string[] = [];
+  for (let offset = 0; offset < bytes.length; offset += 8192) {
+    chunks.push(String.fromCharCode(...bytes.subarray(offset, offset + 8192)));
+  }
+  return btoa(chunks.join(""));
+}
 const fromBase64 = (s: string) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 
 // --- who is logged in ------------------------------------------------------------------------

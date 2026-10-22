@@ -29,7 +29,8 @@ const iam = async () => (await import("@tidecloak/js")).IAMService;
 const fromBase64 = (s: string) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 
 async function fetchAdminPolicy(): Promise<Uint8Array> {
-  const res = await (await iam()).secureFetch("/api/admin-policy");
+  const url = new URL("/api/admin-policy", window.location.origin).href;
+  const res = await (await iam()).secureFetch(url);
   if (!res.ok) throw new Error(`admin policy: ${res.status} ${(await res.json().catch(() => ({}))).error ?? ""}`);
   const { policy } = (await res.json()) as { policy: string };
   return fromBase64(policy);
