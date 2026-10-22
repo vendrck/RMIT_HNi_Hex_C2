@@ -63,6 +63,11 @@ export function listExams(): ExamSummary[] {
     .all() as ExamSummary[];
 }
 
+/** Full rows, ciphertext included. Only for /server-view ("what the operator sees"). */
+export function listExamRows(): ExamRow[] {
+  return db().prepare(`SELECT * FROM exams ORDER BY created_at DESC`).all() as ExamRow[];
+}
+
 export function getExam(id: string): ExamRow | undefined {
   return db().prepare(`SELECT * FROM exams WHERE id = ?`).get(id) as ExamRow | undefined;
 }

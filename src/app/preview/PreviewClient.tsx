@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ExamList } from "@/components/ExamList";
 import { ExamUploadForm } from "@/components/ExamUploadForm";
+import { ServerViewTable } from "@/components/ServerViewTable";
 import type { ExamApi } from "@/components/examApi";
 import type { ExamRow } from "@/lib/db";
 
@@ -68,6 +69,8 @@ export function PreviewClient() {
       <ExamUploadForm api={api} />
       <h1>Exams</h1>
       <ExamList api={listApi} />
+      <h1>What the operator sees</h1>
+      <ServerViewTable rows={[...rows.values()].reverse()} />
     </main>
   );
 }
