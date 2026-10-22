@@ -51,6 +51,11 @@ _The admins' emails are in `TEAM.local.md` (gitignored). This repo is **public**
 | B6 | Write README sections 1–5 (≤300 words total) + the one-liner. Write the video script/voice-over | Word count ≤300 |
 | B7 | Polish: clear UI states (locked / pending / opened), error messages | — |
 
+**Notes for B (from A's setup):**
+- API calls from pages **must** use `secureFetch` from `useTideCloak()` (DPoP). Plain `fetch` with a `Bearer` header gets a 401 from `withAuth`. The template's `dashboard/page.tsx` shows the wrong pattern.
+- The app imports `data/tidecloak.json` (gitignored). Until A's PR is merged, create a placeholder so it builds: `{"realm":"mock","auth-server-url":"http://localhost:8080/","resource":"mock","public-client":true,"jwk":{"keys":[]},"vendorId":"mock"}`. Login won't work with it; that's expected.
+- `crypto.ts` is now wired to Tide (A7 done). With `NEXT_PUBLIC_MOCK_TIDE=1` it still uses the mock.
+
 Dev-only shortcut for B: to see pages without login, put a temporary `/preview` page that renders the components, guarded by `process.env.NODE_ENV === "development"`. **Delete it before merging.** Don't touch `src/lib/auth/*`.
 
 ## File ownership (prevents merge conflicts)

@@ -17,6 +17,11 @@
 
 set -euo pipefail
 
+# Set SUDO= (empty) when your user can run docker without sudo.
+SUDO="${SUDO-sudo}"
+# Set VOLUME_SUFFIX=:Z on SELinux hosts (Fedora/RHEL) so the container can write data/.
+VOLUME_SUFFIX="${VOLUME_SUFFIX:-}"
+
 # --- Derive app-relatable defaults from package.json ---
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -196,8 +201,8 @@ echo "==> Cleaning previous state..."
 docker stop tidecloak 2>/dev/null || true
 docker rm tidecloak 2>/dev/null || true
 mkdir -p "$PROJECT_DIR/data"
-sudo rm -f "$PROJECT_DIR/data/keycloakdb"* 2>/dev/null || true
-sudo chown -R 1000:1000 "$PROJECT_DIR/data"
+$SUDO rm -f "$PROJECT_DIR/data/keycloakdb"* 2>/dev/null || true
+$SUDO chown -R 1000:1000 "$PROJECT_DIR/data"
 
 if lsof -i :8080 >/dev/null 2>&1; then
   echo "ERROR: Port 8080 is already in use."
@@ -218,8 +223,8 @@ case "$TIDECLOAK_IMAGE" in
          exit 1 ;;
 esac
 
-sudo docker run -d --name tidecloak \
-  -v "$PROJECT_DIR/data:/opt/keycloak/data/h2" \
+$SUDO docker run -d --name tidecloak \
+  -v "$PROJECT_DIR/data:/opt/keycloak/data/h2${VOLUME_SUFFIX:-}" \
   -p 8080:8080 \
   -e KC_BOOTSTRAP_ADMIN_USERNAME="$KC_BOOTSTRAP_ADMIN_USERNAME" \
   -e KC_BOOTSTRAP_ADMIN_PASSWORD="$KC_BOOTSTRAP_ADMIN_PASSWORD" \

@@ -16,3 +16,5 @@ data/keycloakdb*
 # Tide pack (fetched, not committed) and private team notes
 .tide-pack/
 TEAM.local.md
+data/admin-policy.json
+data/init.log
