@@ -4,6 +4,9 @@ import "./theme.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { paperFont, uiFont } from "./fonts";
+import { LogoMark } from "./icons";
+import { simUserName, SIMULATED } from "./simUsers";
+import { simSignOut, useSimSession } from "./simulation";
 import styles from "./vault.module.css";
 
 const NAV = [
@@ -15,11 +18,13 @@ const NAV = [
 // Header + page frame for every Exam Vault page. devNote renders a strip under the header (/preview).
 export function AppShell({ children, devNote }: { children: React.ReactNode; devNote?: React.ReactNode }) {
   const pathname = usePathname();
+  const session = useSimSession();
   return (
     <div className={`${uiFont.variable} ${paperFont.variable} ${styles.shell}`}>
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <Link href="/exams" className={styles.wordmark}>
+          <Link href="/" className={styles.wordmark}>
+            <LogoMark className={styles.logoMark} />
             Exam Vault
           </Link>
           <nav aria-label="Main" className={styles.nav}>
@@ -34,6 +39,19 @@ export function AppShell({ children, devNote }: { children: React.ReactNode; dev
               </Link>
             ))}
           </nav>
+          {SIMULATED && session && (
+            <div className={styles.headerRight}>
+              <span className={styles.sessionPill}>
+                <span className={styles.sessionDot} aria-hidden />
+                <span>
+                  <strong>{simUserName(session.user)}</strong> (simulated)
+                </span>
+                <button className={`${styles.buttonQuiet} ${styles.buttonSmall}`} onClick={simSignOut}>
+                  Switch user
+                </button>
+              </span>
+            </div>
+          )}
         </div>
       </header>
       {devNote && (
@@ -41,7 +59,29 @@ export function AppShell({ children, devNote }: { children: React.ReactNode; dev
           <div className={styles.devStripInner}>{devNote}</div>
         </div>
       )}
-      <main className={styles.main}>{children}</main>
+      <main key={pathname} className={styles.main}>
+        {children}
+      </main>
+      <footer className={styles.footer}>
+        <div className={styles.footerInner}>
+          <span>
+            Exam Vault. Built with{" "}
+            <a href="https://tide.org/tidecloak" target="_blank" rel="noreferrer">
+              TideCloak
+            </a>
+            .
+          </span>
+          {SIMULATED && (
+            <span>
+              Sign-in, roles and approvals are simulated (
+              <a href="https://tide.org/unlocked/#plan-c" target="_blank" rel="noreferrer">
+                Plan C
+              </a>
+              ).
+            </span>
+          )}
+        </div>
+      </footer>
     </div>
   );
 }

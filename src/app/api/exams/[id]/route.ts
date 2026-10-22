@@ -1,9 +1,9 @@
-import { withAuth } from "@/lib/auth/protect";
+import { withExamAuth } from "../simulatedAuth";
 import { getExam } from "@/lib/db";
 
 // withAuth passes (req, jwt) only, so the id comes from the path: /api/exams/<id>.
 // Returns ciphertext + policies; decryption happens in the opener's browser.
-export const GET = withAuth(async (req) => {
+export const GET = withExamAuth(async (req) => {
   const id = decodeURIComponent(req.nextUrl.pathname.split("/").pop() ?? "");
   const exam = getExam(id);
   if (!exam) {

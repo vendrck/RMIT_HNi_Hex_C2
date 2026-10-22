@@ -1,4 +1,4 @@
-import { withAuth } from "@/lib/auth/protect";
+import { withExamAuth } from "./simulatedAuth";
 import { insertExam, getExam, listExams } from "@/lib/db";
 
 // The server only ever sees ciphertext + signed policies. Anything that could be
@@ -19,7 +19,7 @@ function isCiphertext(value: string): boolean {
 
 const nonEmpty = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
 
-export const POST = withAuth(async (req, jwt) => {
+export const POST = withExamAuth(async (req, jwt) => {
   let body: Record<string, unknown>;
   try {
     body = await req.json();
@@ -67,6 +67,6 @@ export const POST = withAuth(async (req, jwt) => {
 });
 
 // List view: no ciphertext.
-export const GET = withAuth(async () => {
+export const GET = withExamAuth(async () => {
   return Response.json({ exams: listExams() });
 });

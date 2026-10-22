@@ -1,4 +1,5 @@
 import type { ExamRow } from "@/lib/db";
+import { PaperIcon } from "./icons";
 import styles from "./vault.module.css";
 
 // Presentational only (no hooks), so it renders from the server page and from /preview.
@@ -14,6 +15,7 @@ export function ServerViewTable({ rows }: { rows: ExamRow[] }) {
       <p className={styles.caption}>{CAPTION}</p>
       {rows.length === 0 ? (
         <div className={styles.empty}>
+          <PaperIcon className={styles.emptyIcon} />
           <p>The database is empty. Upload a paper, then come back to see what the server stores.</p>
         </div>
       ) : (

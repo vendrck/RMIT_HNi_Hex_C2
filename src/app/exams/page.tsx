@@ -2,9 +2,13 @@
 
 import { useTideCloak } from "@tidecloak/nextjs";
 import { AppShell, PageHead } from "@/components/AppShell";
+import { CommitteePanel } from "@/components/CommitteePanel";
 import { ExamList } from "@/components/ExamList";
 import { useExamApi } from "@/components/examApi";
 import { GovernanceBanner } from "@/components/GovernanceBanner";
+import { SIMULATED } from "@/components/simUsers";
+import { simSignOut } from "@/components/simulation";
+import styles from "@/components/vault.module.css";
 
 export default function ExamsPage() {
   const api = useExamApi();
@@ -15,8 +19,13 @@ export default function ExamsPage() {
       <PageHead title="Papers">
         Opening a paper decrypts it in your browser, only if the Tide network agrees you may.
       </PageHead>
-      <GovernanceBanner />
-      <ExamList api={api} onSignInAgain={logout} />
+      <div className={styles.split}>
+        <ExamList api={api} onSignInAgain={SIMULATED ? simSignOut : logout} />
+        <aside className={styles.rail}>
+          <GovernanceBanner />
+          {SIMULATED && <CommitteePanel />}
+        </aside>
+      </div>
     </AppShell>
   );
 }

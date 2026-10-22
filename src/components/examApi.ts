@@ -2,6 +2,8 @@
 
 import { useTideCloak } from "@tidecloak/nextjs";
 import { useCallback } from "react";
+import { SIM_USER_HEADER, SIMULATED } from "./simUsers";
+import { useSimSession } from "./simulation";
 
 /** fetch-shaped call to our own API. Pages use useExamApi(); /preview passes a fake. */
 export type ExamApi = (path: string, init?: RequestInit) => Promise<Response>;
@@ -12,9 +14,18 @@ export type ExamApi = (path: string, init?: RequestInit) => Promise<Response>;
  */
 export function useExamApi(): ExamApi {
   const { secureFetch } = useTideCloak();
+  const session = useSimSession();
   return useCallback(
-    (path, init) => secureFetch(new URL(path, window.location.origin).href, init),
-    [secureFetch]
+    (path, init) => {
+      if (SIMULATED) {
+        // Plan C: the simulated identity stands in for the Tide token (see simulatedAuth.ts).
+        const headers = new Headers(init?.headers);
+        if (session) headers.set(SIM_USER_HEADER, session.user);
+        return fetch(path, { ...init, headers });
+      }
+      return secureFetch(new URL(path, window.location.origin).href, init);
+    },
+    [secureFetch, session]
   );
 }
 
