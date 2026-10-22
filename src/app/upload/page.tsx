@@ -1,18 +1,18 @@
 "use client";
 
+import { AppShell, PageHead } from "@/components/AppShell";
 import { ExamUploadForm } from "@/components/ExamUploadForm";
 import { useExamApi } from "@/components/examApi";
 
 export default function UploadPage() {
   const api = useExamApi();
   return (
-    <main>
-      <h1>Upload an exam</h1>
-      <p>
-        The exam is encrypted in your browser. The server only stores ciphertext, and you
-        won&apos;t be able to read it back. <a href="/exams">All exams</a>
-      </p>
+    <AppShell>
+      <PageHead title="Upload a paper">
+        The paper is encrypted in your browser and the server stores only ciphertext. Once
+        uploaded, you can&apos;t read it back.
+      </PageHead>
       <ExamUploadForm api={api} />
-    </main>
+    </AppShell>
   );
 }

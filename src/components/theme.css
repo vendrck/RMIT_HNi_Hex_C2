@@ -1,0 +1,66 @@
+/* Exam Vault tokens. Imported by AppShell so src/app/layout.tsx stays untouched. */
+:root {
+  --paper: #f4f5f7;
+  --sheet: #ffffff;
+  --ink: #1a2440;
+  --ink-soft: #4f5a72;
+  --rule: #c5cbd6;
+  --seal: #8e1b2c;
+  --seal-tint: #f6e7ea;
+  --opened: #1e6a4c;
+  --opened-tint: #e3f1ea;
+  --focus: #2f5bd3;
+  --notice: #e9eef9;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12182a;
+    --sheet: #1a2238;
+    --ink: #e6e9f0;
+    --ink-soft: #a7b0c4;
+    --rule: #3a4560;
+    --seal: #e0798a;
+    --seal-tint: #3a1f29;
+    --opened: #6fcfa4;
+    --opened-tint: #173528;
+    --focus: #8fb0ff;
+    --notice: #1f2a45;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12182a;
+  --sheet: #1a2238;
+  --ink: #e6e9f0;
+  --ink-soft: #a7b0c4;
+  --rule: #3a4560;
+  --seal: #e0798a;
+  --seal-tint: #3a1f29;
+  --opened: #6fcfa4;
+  --opened-tint: #173528;
+  --focus: #8fb0ff;
+  --notice: #1f2a45;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,4 +1,5 @@
 import type { ExamRow } from "@/lib/db";
+import styles from "./vault.module.css";
 
 // Presentational only (no hooks), so it renders from the server page and from /preview.
 const CAPTION =
@@ -10,39 +11,43 @@ const bytes = (s: string) => new TextEncoder().encode(s).length;
 export function ServerViewTable({ rows }: { rows: ExamRow[] }) {
   return (
     <section>
-      <p>
-        <strong>{CAPTION}</strong>
-      </p>
+      <p className={styles.caption}>{CAPTION}</p>
       {rows.length === 0 ? (
-        <p>The database is empty.</p>
+        <div className={styles.empty}>
+          <p>The database is empty. Upload a paper, then come back to see what the server stores.</p>
+        </div>
       ) : (
-        <table style={{ borderCollapse: "collapse", width: "100%" }}>
-          <thead>
-            <tr>
-              {["id", "title", "ciphertext", "write policy", "read policy", "created_by", "created_at"].map((h) => (
-                <th key={h} style={{ textAlign: "left", borderBottom: "1px solid #999", padding: 4 }}>
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} style={{ verticalAlign: "top" }}>
-                <td style={{ padding: 4, fontFamily: "monospace" }}>{r.id}</td>
-                <td style={{ padding: 4 }}>{r.title}</td>
-                <td style={{ padding: 4, fontFamily: "monospace", wordBreak: "break-all", maxWidth: "40ch" }}>
-                  {r.ciphertext.slice(0, PREVIEW_CHARS)}
-                  {r.ciphertext.length > PREVIEW_CHARS && `… (${r.ciphertext.length} chars)`}
-                </td>
-                <td style={{ padding: 4 }}>{bytes(r.write_policy)} bytes</td>
-                <td style={{ padding: 4 }}>{bytes(r.read_policy)} bytes</td>
-                <td style={{ padding: 4, fontFamily: "monospace" }}>{r.created_by}</td>
-                <td style={{ padding: 4 }}>{r.created_at}</td>
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">title</th>
+                <th scope="col">ciphertext</th>
+                <th scope="col">write policy</th>
+                <th scope="col">read policy</th>
+                <th scope="col">created_by</th>
+                <th scope="col">created_at</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id}>
+                  <td className={`${styles.mono} ${styles.nowrap}`}>{r.id}</td>
+                  <td>{r.title}</td>
+                  <td className={`${styles.mono} ${styles.cipher}`}>
+                    {r.ciphertext.slice(0, PREVIEW_CHARS)}
+                    {r.ciphertext.length > PREVIEW_CHARS && `… (${r.ciphertext.length} chars)`}
+                  </td>
+                  <td className={styles.nowrap}>{bytes(r.write_policy)} bytes</td>
+                  <td className={styles.nowrap}>{bytes(r.read_policy)} bytes</td>
+                  <td className={styles.mono}>{r.created_by}</td>
+                  <td className={`${styles.mono} ${styles.nowrap}`}>{r.created_at}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   );

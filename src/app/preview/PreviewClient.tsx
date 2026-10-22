@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { AppShell, PageHead } from "@/components/AppShell";
 import { ExamList } from "@/components/ExamList";
 import { ExamUploadForm } from "@/components/ExamUploadForm";
 import { GovernanceBanner } from "@/components/GovernanceBanner";
@@ -45,22 +46,20 @@ export function PreviewClient() {
   const listApi = useMemo<ExamApi>(() => (p, i) => api(p, i), [api, version]);
 
   return (
-    <main>
-      <p style={{ background: "#fee", padding: 8 }}>
-        SIMULATION: fake in-memory API, mock crypto and a simulated committee. Not the real
-        Tide network.
-      </p>
-      <h1>Upload an exam</h1>
+    <AppShell
+      devNote="SIMULATION: fake in-memory API, mock crypto and a simulated committee. Not the real Tide network."
+    >
+      <PageHead title="Upload a paper" />
       <ExamUploadForm api={api} />
-      <h1>Exams</h1>
+      <PageHead title="Papers" />
       <GovernanceBanner />
       <MockGovernance />
       <ExamList
         api={listApi}
         onSignInAgain={() => alert("The real /exams page signs you out here, so you can sign in again.")}
       />
-      <h1>What the operator sees</h1>
+      <PageHead title="What the operator sees" />
       <ServerViewTable rows={[...rows.values()].reverse()} />
-    </main>
+    </AppShell>
   );
 }

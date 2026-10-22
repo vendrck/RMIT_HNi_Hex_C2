@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createExamPolicies, encryptExam } from "@/lib/vault/crypto";
 import { readableError, readJson, type ExamApi } from "./examApi";
+import styles from "./vault.module.css";
 
 type Status =
   | { kind: "idle" }
@@ -51,39 +52,68 @@ export function ExamUploadForm({ api }: { api: ExamApi }) {
 
   if (status.kind === "done") {
     return (
-      <section>
+      <section className={styles.success} aria-live="polite">
         <h2>Uploaded: {status.title}</h2>
         <p>
           <strong>You can&apos;t read this back.</strong> Your access is write-only. Opening it
           needs the exam-opener role, which takes 2 of 3 committee approvals.
         </p>
-        <button onClick={() => setStatus({ kind: "idle" })}>Upload another</button>
+        <button className={styles.buttonQuiet} onClick={() => setStatus({ kind: "idle" })}>
+          Upload another
+        </button>
       </section>
     );
   }
 
   const working = status.kind === "working";
   return (
-    <form onSubmit={onSubmit}>
-      <p>
-        <label>
+    <form className={styles.form} onSubmit={onSubmit}>
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="exam-title">
           Title
-          <br />
-          <input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={200} required />
         </label>
-      </p>
-      <p>
-        <label>
+        <input
+          id="exam-title"
+          className={styles.input}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          maxLength={200}
+          placeholder="Final Mathematics Paper 1"
+          required
+        />
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="exam-text">
           Exam text
-          <br />
-          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={12} cols={70} required />
         </label>
-      </p>
-      <button type="submit" disabled={working || !title.trim() || !text}>
-        Encrypt and upload
-      </button>
-      {working && <p>{status.step}</p>}
-      {status.kind === "error" && <p role="alert">Upload failed: {status.message}</p>}
+        <span className={styles.hint} id="exam-text-hint">
+          Encrypted on this device before upload. The server never sees it.
+        </span>
+        <textarea
+          id="exam-text"
+          className={styles.textarea}
+          aria-describedby="exam-text-hint"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          rows={12}
+          required
+        />
+      </div>
+      <div className={styles.formActions}>
+        <button className={styles.button} type="submit" disabled={working || !title.trim() || !text}>
+          Encrypt and upload
+        </button>
+        {working && (
+          <p className={styles.progress} role="status">
+            {status.step}
+          </p>
+        )}
+      </div>
+      {status.kind === "error" && (
+        <p className={styles.alert} role="alert">
+          <strong>Upload failed.</strong> {status.message}
+        </p>
+      )}
     </form>
   );
 }
