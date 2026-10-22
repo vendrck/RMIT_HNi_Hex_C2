@@ -13,7 +13,7 @@ Before recording:
 | Shot | On screen | Voice-over |
 |---|---|---|
 | 1 | Title card: "Exam Vault: no one opens it alone" | "This is Exam Vault. It stores exam papers so that no single person can open them." |
-| 2 | Home page, then the `/upload` page | "Not the setter. Not IT. Not the server operator. Not even us. Opening a paper takes two of three committee approvals." |
+| 2 | Home page, then the `/upload` page | "Exam boards can prepare exams online and send them digitally, without quarantining anyone. No one, not even us, opens a paper alone. It takes two of three committee approvals." |
 
 ## 0:20–0:40 · The constraint
 
@@ -37,7 +37,7 @@ Before recording:
 | Shot | On screen | Voice-over |
 |---|---|---|
 | 6 | The opened exam, then the README "Honest limits" line | "No single person can leak this paper. Not the uploader, not an admin, not the server. A colluding quorum still could, and once opened, text can be copied." |
-| 7 | End card: "Exam Vault · Built with TideCloak" + repo URL | "The same pattern works for sealed tenders and grade changes. Trust a quorum, not a person." |
+| 7 | End card: "Exam Vault · Built with TideCloak" + repo URL | "Prepare exams online and send them digitally, without quarantining anyone. The same pattern works for sealed tenders and grade changes." |
 
 ## Checklist
 
