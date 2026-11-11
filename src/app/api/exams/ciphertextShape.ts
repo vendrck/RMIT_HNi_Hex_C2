@@ -9,6 +9,10 @@ export function isCiphertext(value: string, mock: boolean): boolean {
   // Real Tide ciphertext always carries headers, so a 16-character floor still applies to it.
   const isMock = mock && value.startsWith("MOCK:");
   const body = isMock ? value.slice(5) : value;
-  const min = isMock ? 4 : 16;
+  const min = isMock ? 8 : 16;
   return body.length >= min && body.length % 4 === 0 && body.length <= MAX_CIPHERTEXT && BASE64.test(body);
+}
+
+export function ciphertextByteLength(value: string): number {
+  return atob(value).length;
 }
