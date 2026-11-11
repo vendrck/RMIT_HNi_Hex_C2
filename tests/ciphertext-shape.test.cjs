@@ -16,7 +16,7 @@ function loadModule(relativePath) {
   return module.exports;
 }
 
-const { isCiphertext } = loadModule("src/app/api/exams/ciphertextShape.ts");
+const { isCiphertext, ciphertextByteLength } = loadModule("src/app/api/exams/ciphertextShape.ts");
 const mockOf = (text) => `MOCK:${Buffer.from(text, "utf8").toString("base64")}`;
 
 test("mock mode accepts a short exam (regression: 'hi' was refused)", () => {
@@ -42,4 +42,21 @@ test("plaintext and empty mock bodies are refused", () => {
 test("real ciphertext keeps the 16-character floor", () => {
   assert.equal(isCiphertext("aGk=", false), false);
   assert.equal(isCiphertext(Buffer.alloc(48, 7).toString("base64"), false), true);
+});
+
+test("byte length counts the decoded bytes, with or without padding", () => {
+  assert.equal(ciphertextByteLength(Buffer.from("a").toString("base64")), 1);
+  assert.equal(ciphertextByteLength(Buffer.from("hi").toString("base64")), 2);
+  assert.equal(ciphertextByteLength(Buffer.alloc(48, 7).toString("base64")), 48);
+});
+
+test("byte length ignores the MOCK: prefix", () => {
+  assert.equal(ciphertextByteLength(mockOf("hi")), 2);
+  assert.equal(ciphertextByteLength(mockOf("Section A")), 9);
+});
+
+test("byte length is 0 for anything that is not base64", () => {
+  assert.equal(ciphertextByteLength(""), 0);
+  assert.equal(ciphertextByteLength("MOCK:"), 0);
+  assert.equal(ciphertextByteLength("not base64!"), 0);
 });

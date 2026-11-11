@@ -12,3 +12,11 @@ export function isCiphertext(value: string, mock: boolean): boolean {
   const min = isMock ? 4 : 16;
   return body.length >= min && body.length % 4 === 0 && body.length <= MAX_CIPHERTEXT && BASE64.test(body);
 }
+
+/** Bytes the base64 body decodes to, ignoring a leading MOCK: prefix. Anything that is not base64 counts as 0. */
+export function ciphertextByteLength(value: string): number {
+  const body = value.startsWith("MOCK:") ? value.slice(5) : value;
+  if (body.length === 0 || body.length % 4 !== 0 || !BASE64.test(body)) return 0;
+  const padding = body.endsWith("==") ? 2 : body.endsWith("=") ? 1 : 0;
+  return (body.length / 4) * 3 - padding;
+}
